@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="manifest" href="manifest.json" />
+
+  </head>
+  <body style="background-color: #f2f2f2;">
+    <div class="container col-md-4">
+      <div class="shadow" style="margin-top: 50px; background-color: white; padding: 20px; border-radius: 10px;">
+        <div class="row justify-content-center">
+          <img src="./icons/logo_site.png" style="border-radius: 9px;"/>
+        </div>
+        <hr>
+        <form action="">
+          <div class="form-group">
+            <input class="form-control" id="pag" type="number" placeholder="Número de páginas"/>
+          </div>
+          <div class="form-group">
+            <select id="prazo" class="custom-select mb-3">
+              <option selected>Prazo</option>
+              <option value=6>5 dias</option>
+              <option value=4>10 dias</option>
+              <option value=3>15 dias</option>
+              <option value=2>20 dias</option>
+              <option value=0>30 dias</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select id="area" class="custom-select mb-3">
+              <option selected>Área</option>
+              <option id="adm" value=3>Administração</option>
+              <option value=20>Medicina</option>
+              <option value=15>Odonto</option>
+              <option value=2>Enfermagem</option>
+              <option value=2>Fisioterapia</option>
+              <option value=2>Técnico</option>
+              <option value=0>Outros</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select id="tipo" class="custom-select mb-3">
+              <option selected>Tipo</option>
+              <option id="revisao"value=0>Revisão (Bibliográfica, Literatura, Integrativa, TCC II)</option>
+              <option id="especial" value=7>Especial (Estudo de caso - Plano de negócios)</option>
+              <option id="projeto" value=450>Projeto (Pré-Projeto, Projeto de Pesquisa, TCC I)</option>
+              <option id="tarefa" value=2>Tarefa (PIM, PTG e afins)</option>
+            </select>
+          </div>
+
+          <div class='row'>
+            <div class='col-sm'>
+              <button type="button" onclick="calculadora()" class="btn btn-outline-secondary mt-1">calcular</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm mt-1">
+              <button type="button" class="btn btn-secondary" id="resultMin">Min: R$0</button>
+            </div>
+            <div class="col-sm mt-1">
+              <button type="button" class="btn btn-secondary" id="resultMax">Max: R$0</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm mt-1">
+              <button type="button" class="btn btn-secondary" id="resultMin10">Min-10x: R$0</button>
+            </div>
+            <div class="col-sm mt-1">
+              <button type="button" class="btn btn-secondary" id="resultMax10">Max-10x: R$0</button>
+            </div>
+          </div>
+        </form>
+        <div id="result" style="margin-top: 25px;">
+
+        </div>
+      </div>
+  </div>
+
+<script type="text/javascript">
+function calculadora(){
+  var paginas = parseInt(document.getElementById('pag').value, 10);
+  var prazo = parseInt(document.getElementById('prazo').value, 10);
+  var area = parseInt(document.getElementById('area').value, 10);
+  var tipo = parseInt(document.getElementById('tipo').value, 10);
+  var valor = 0;
+
+  //calculando valor do numero de páginas
+  if (paginas > 0 && paginas < 4){
+    valor = 50;
+  } else if (paginas > 3 && paginas < 10){
+    valor = 35;
+  } else if (paginas > 9){
+    valor = 30;
+  }
+
+  //calculando o valor de acordo com o prazo
+  valor = valor + prazo;
+
+  //calculando o valor de acordo com a Área
+  valor = valor + area;
+
+  //calculando o valor de acordo com o Tipo
+  valor = valor + tipo;
+
+  //calculando valor final
+  valor = valor * paginas;
+  //Checa se o tipo é projeto, se for o valor deve ser 450
+  if (tipo == 450){
+    valor = 450;
+  }
+  valorMax = valor + valor * 0.35;
+
+  //calculando valor final pra 10px
+  valorMin10 = valorMax;
+  valorMax10 = valorMax + valorMax * 0.35;
+
+
+
+  //deixando os valores com duas casas decimais;
+  valor = parseFloat(valor.toFixed(2));
+  valor  = valor.toLocaleString('pt-BR');
+  valorMax = parseFloat(valorMax.toFixed(2));
+  valorMax = valorMax.toLocaleString('pt-BR');
+  valorMin10 = parseFloat(valorMin10.toFixed(2));
+  valorMin10 = valorMin10.toLocaleString('pt-BR');
+  valorMax10 = parseFloat(valorMax10.toFixed(2));
+  valorMax10 = valorMax10.toLocaleString('pt-BR');
+
+  //mostrando valores dos resultados em tela
+  btnResult = document.getElementById('resultMin');
+  btnResult.textContent = 'Min: R$'+valor;
+  btnResultMax = document.getElementById('resultMax');
+  btnResultMax.textContent = 'Max: R$'+valorMax
+  btnResultMin10 = document.getElementById('resultMin10');
+  btnResultMin10.textContent = 'Min-10x: R$'+valorMin10;
+  btnResultMax10 = document.getElementById('resultMax10');
+  btnResultMax10.textContent = 'Max-10x: R$'+valorMax10;
+}
+</script>
+
+<script>
+if('serviceWorker' in navigator) {
+navigator.serviceWorker.register('/sw.js')
+  .then(function() {
+        console.log('Service Worker Registered');
+  });
+}
+</script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  </body>
+</html>
